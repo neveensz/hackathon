@@ -1,0 +1,164 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "access-webhook",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9a18ec6e-7c4b-42da-b03c-6bcf6dcfa262",
+      "name": "Webhook",
+      "webhookId": "414d3242-b80d-49f6-8342-5e01361b5125"
+    },
+    {
+      "parameters": {
+        "jsCode": "// نستقبل البيانات من الـ Webhook\nconst body = $json;\n\n// نرتب الحقول المهمة\nreturn [{\n  json: {\n    event_id: body.event_id || null,\n    timestamp: body.timestamp || new Date().toISOString(),\n    subject_id: body.subject_id || null,\n    subject_name: body.subject_name || \"Unknown\",\n    result: (body.result || \"\").toLowerCase(),\n    confidence: Number(body.confidence || 0),\n    image_url: body.image_url || null,\n    camera_id: body.camera_id || null\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "7f2906a8-cda7-4416-8b21-9173c47e7b2e",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "3ef24b73-9c56-4411-b988-da9e7545b77b",
+              "leftValue": "",
+              "rightValue": "access_granted",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "b5a0acd5-828d-4514-868c-0fcc2601da09",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "dyiaalqaisi77@gmail.com",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        624,
+        80
+      ],
+      "id": "2de39f79-0e7b-4b78-8113-a831f0eecbed",
+      "name": "Send a message1",
+      "webhookId": "1d886733-013f-46ec-987d-25af430954ed",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "1CjSKZotQgsDO4tp",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "card90683@gmail.com",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        624,
+        -96
+      ],
+      "id": "53a5b3f9-8bb0-416b-a25f-766c9fe5f1e5",
+      "name": "Send a message",
+      "webhookId": "0bb94a3b-f56d-4056-870a-13659b71f3f8",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "1CjSKZotQgsDO4tp",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "05abb5db-7acf-49eb-9a70-78a56562d35c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e0b41e311733a512956f1a2edf543cc481dfed744fb61c5146902ba5f48deda2"
+  },
+  "id": "LferRBZktYZXAytF",
+  "tags": []
+}
